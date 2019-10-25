@@ -31,14 +31,12 @@ list("./",(o)=>{
       filelistresult.push(filelist[k]);
     }
   }
-  files = filelistresult;  //files 및 filelistresult는 하위 디렉토리를 전부 포함한 pbf파일의 경로 리스트
-
-//   console.log(files);
+    files = filelistresult;  //files 및 filelistresult는 하위 디렉토리를 전부 포함한 pbf파일의 경로 리스트
 
     //각 파일리스트 for문으로 순회하며 콘텐츠 변경한 뒤 regex로 변수 따서 html 만들기
-    var template = files[0] + '\n\n';
+    var template1 = files[0] + '\n\n';
     fs.readFile(files[0], 'utf8', (err, data) => {
-        console.log('0번파일 처리중');
+        // console.log('0번파일 처리중');
         if (err) throw err;
 
         var originaltext = data
@@ -48,37 +46,32 @@ list("./",(o)=>{
             textlists.push(textresult[0]); //store the file name into the array files
         };
         for(let l=0; l<textlists.length; l++) {
-            template = template + textlists[l] + '\n';
+            template1 = template1 + textlists[l] + '\n';
         }
-        console.log(template);
-        console.log('0번파일 처리 끝\n\n');
-        console.log('파일숫자는 ' + files.length + '\n\n');
+
     });
 
+    var filecontents = [];
+    var template = '';
+    var currentfilename = '';
     for(let n=1; n<files.length; n++) {
-        fs.readFile(files[n], 'utf8', (err, data) => {
-            if (err) throw err;
-            console.log(n +'번파일인 ' + files[n] + '처리중 \n\n');
-            var originaltext = data;
-            var textlists = [];
-            var reg = /\*\D*\*/g;
-            textresult = reg.exec(originaltext)
-            
-            if(textresult != null ) {
-                textlists.push(textresult[0]); //store the file name into the array files
-            };
+        filecontents = fs.readFileSync(files[n], 'utf8');
+        
+        var originaltext = filecontents;
+        var textlists = [];
+        var reg = /\*.*\*/g;
+        while((textresult = reg.exec(originaltext)) != null ) {
+            textlists.push(textresult[0]); //store the file name into the array files
+        };
+        
+        currentfilename = files[n];
 
-            // console.log(n + '번파일의 내용은' + textlists[0] + '입니다');
+        template = template + files[n] + '\n\n';
 
-            template = template + files[n] + '\n\n';
-
-            for(let k=0; k<textlists.length; k++) {
-                template = template + textlists[k] + '\n';
-            }
-            template = template + '\n\n\n'
-            // console.log(template);
-
-           
-        });
+        for(let k=0; k<textlists.length; k++) {
+            template = template + textlists[k] + '\n';
+        }
+        template = template + '\n\n\n'
+        console.log(template);
     }
 });
