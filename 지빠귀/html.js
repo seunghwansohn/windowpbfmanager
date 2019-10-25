@@ -50,24 +50,34 @@ list("./",(o)=>{
         }
       });
     };
-    
-    var secondtemplate1 = function() {
+
+    var secondtemplate = function(n) {
       var filecontents = [];
       var template = '';
       var textlists = [];
       var currentfilename = '';
-      for(let n=1; n<files.length; n++) {
-          filecontents = fs.readFileSync(files[n], 'utf8');
-          var originaltext = filecontents;
-          var reg = /\*.*\*/g;
-          while((textresult = reg.exec(originaltext)) != null ) {
-              textlists.push(textresult[0]); //store the file name into the array files
-          };
-          console.log(textlists);
+      filecontents = fs.readFileSync(files[n], 'utf8');
+      var originaltext = filecontents;
+      var reg = /\*.*\*/g;
+      while((textresult = reg.exec(originaltext)) != null ) {
+          textlists.push(textresult[0]); //store the file name into the array files
       };
-    };     
+      template = template + files[n] + '\n\n';
+      for (k=0; k<textlists.length; k++) {
+        template = template + textlists[k] + '\n';
+      }
+      console.log(template);
+    };
+    
+    // var excutef = function(n, callback) {
+    //   for (var n=1; n<filelist.length; n++){
+    //     callbback(n);
+    //   }
+    // }
 
-    secondtemplate1();
+    // excutef(n, secondtemplate1());
+
+    secondtemplate(4);
 
     var secondtemplate2 = function() {  
       var currentfilename = files[n];
