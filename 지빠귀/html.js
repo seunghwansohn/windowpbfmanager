@@ -35,10 +35,10 @@ list("./",(o)=>{
 
     //각 파일리스트 for문으로 순회하며 콘텐츠 변경한 뒤 regex로 변수 따서 html 만들기
     var template1 = files[0] + '\n\n';
-    fs.readFile(files[0], 'utf8', (err, data) => {
+    var firsttemplate = function () {
+      fs.readFile(files[0], 'utf8', (err, data) => {
         // console.log('0번파일 처리중');
         if (err) throw err;
-
         var originaltext = data
         var textlists = [];
         var reg = /\*\D*\*/g;
@@ -48,30 +48,36 @@ list("./",(o)=>{
         for(let l=0; l<textlists.length; l++) {
             template1 = template1 + textlists[l] + '\n';
         }
+      });
+    };
+    
+    var secondtemplate1 = function() {
+      var filecontents = [];
+      var template = '';
+      var textlists = [];
+      var currentfilename = '';
+      for(let n=1; n<files.length; n++) {
+          filecontents = fs.readFileSync(files[n], 'utf8');
+          var originaltext = filecontents;
+          var reg = /\*.*\*/g;
+          while((textresult = reg.exec(originaltext)) != null ) {
+              textlists.push(textresult[0]); //store the file name into the array files
+          };
+          console.log(textlists);
+      };
+    };     
 
-    });
+    secondtemplate1();
 
-    var filecontents = [];
-    var template = '';
-    var currentfilename = '';
-    for(let n=1; n<files.length; n++) {
-        filecontents = fs.readFileSync(files[n], 'utf8');
-        
-        var originaltext = filecontents;
-        var textlists = [];
-        var reg = /\*.*\*/g;
-        while((textresult = reg.exec(originaltext)) != null ) {
-            textlists.push(textresult[0]); //store the file name into the array files
-        };
-        
-        currentfilename = files[n];
+    var secondtemplate2 = function() {  
+      var currentfilename = files[n];
 
-        template = template + files[n] + '\n\n';
+          template = template + files[n] + '\n\n';
 
-        for(let k=0; k<textlists.length; k++) {
-            template = template + textlists[k] + '\n';
-        }
-        template = template + '\n\n\n'
-        console.log(template);
-    }
+          for(let k=0; k<textlists.length; k++) {
+              template = template + textlists[k] + '\n';
+          }
+          template = template + '\n\n\n'
+          console.log(template);
+    };
 });
