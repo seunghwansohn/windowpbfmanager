@@ -74,10 +74,17 @@ list("./",(o)=>{
     //     callbback(n);
     //   }
     // }
-
+    // secondtemplate(2);
     // excutef(n, secondtemplate1());
 
-    secondtemplate(4);
+    var excute = function(){
+      for (n=0; n<files.length; n++){
+        secondtemplate(n);
+      // }
+      };
+    }
+
+    excute();
 
     var secondtemplate2 = function() {  
       var currentfilename = files[n];
