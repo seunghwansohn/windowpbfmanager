@@ -12,12 +12,6 @@ var path = __dirname;
 var filelist = [];
 var filelistresult = [];
 
-fs.writeFile('힣.pbf', '', (err) => {
-    // fs.writeFile(files[i].replace('.pbf', '.txt'), text, (err) => {
-
-    if (err) throw err;
-});
-
 list("./",(o)=>{
   if(o.error) throw o.error;
   for(var i=0; i<o.files.length; i++) {
@@ -31,8 +25,9 @@ list("./",(o)=>{
       filelistresult.push(filelist[k]);
     }
   }
-    files = filelistresult;  //files 및 filelistresult는 하위 디렉토리를 전부 포함한 pbf파일의 경로 리스트
-
+    files = filelistresult.sort();  //files 및 filelistresult는 하위 디렉토리를 전부 포함한 pbf파일의 경로 리스트
+    fileslength=files.length;
+  // console.log(files);
     //각 파일리스트 for문으로 순회하며 콘텐츠 변경한 뒤 regex로 변수 따서 html 만들기
     var template1 = files[0] + '\n\n';
     var firsttemplate = function () {
@@ -62,39 +57,71 @@ list("./",(o)=>{
       while((textresult = reg.exec(originaltext)) != null ) {
           textlists.push(textresult[0]); //store the file name into the array files
       };
-      template = template + files[n] + '\n\n';
+      template = '<br>----------------------------------------------<br>' + template + '<a href="file:///' + files[n] + '">' + files[n] + '</a><br><br>';
       for (k=0; k<textlists.length; k++) {
-        template = template + textlists[k] + '\n';
+        template = template + textlists[k] + '<br>';
       }
-      console.log(template);
+      return template;
     };
     
-    // var excutef = function(n, callback) {
-    //   for (var n=1; n<filelist.length; n++){
-    //     callbback(n);
-    //   }
-    // }
-    // secondtemplate(2);
-    // excutef(n, secondtemplate1());
-
-    var excute = function(){
-      for (n=0; n<files.length; n++){
-        secondtemplate(n);
+    var excute = function(func, fileslength){
+        var html = `<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+`;
+      for (n=0; n<fileslength; n++){
+        html = html + func(n);
+       
       // }
       };
+      html = html + `
+</body>`
+      fs.writeFile('책갈피리스트.html', html, (err) => {
+      
+        if (err) throw err;
+    });
     }
 
-    excute();
+    excute(secondtemplate, fileslength);
 
-    var secondtemplate2 = function() {  
-      var currentfilename = files[n];
-
-          template = template + files[n] + '\n\n';
-
-          for(let k=0; k<textlists.length; k++) {
-              template = template + textlists[k] + '\n';
-          }
-          template = template + '\n\n\n'
-          console.log(template);
-    };
+  //   const promise = new Promise((resolve,reject) => {
+  //     if (true) {
+  //       var filecontents = [];
+  //       var template = '';
+  //       // var textlists = [];
+  //       var currentfilename = '';
+  //       filecontents = fs.readFileSync(files[2], 'utf8');
+  //       var originaltext = filecontents;
+  //         resolve(originaltext);
+  //     } else {
+  //         reject('실패');
+  //     }
+  // });
+  
+  //     promise
+  //         .then((originaltext) => {
+  //             var textlists = [];
+  //             var template1 = '';
+  //             var reg = /\*.*\*/g;
+  //               while((textresult = reg.exec(originaltext)) != null ) {
+  //                   textlists.push(textresult[0]); //store the file name into the array files
+  //               };
+  //               for(let l=0; l<textlists.length; l++) {
+  //                 template1 = template1 + textlists[l] + '\n';
+  //               }
+  //             // console.log(template1);
+  //             return new Promise((resolve, reject) => {
+  //                 resolve(template1);
+  //             });
+  //         })
+      
+  //         .then((template1) => {
+  //             console.log(template1);
+  //             return new Promise((resolve, reject) => {
+  //                 resolve('멍청이');
+  //             });
+  //         })
+    
 });

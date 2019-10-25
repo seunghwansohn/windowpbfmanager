@@ -25,7 +25,13 @@ const condition2 = function (){
 }
 const promise = new Promise((resolve,reject) => {
     if (condition2() == true) {
-        resolve('성공');
+        (function () {
+            kkk = 'fjfjfj';
+
+        resolve(kkk);
+
+        })();
+
     } else {
         reject('실패');
     }
@@ -35,7 +41,8 @@ promise
     .then((message) => {
         console.log(message);
         return new Promise((resolve, reject) => {
-            resolve('바보');
+            var uuu = ['바보', '멍청구'];
+            resolve(uuu);
         });
     })
 
