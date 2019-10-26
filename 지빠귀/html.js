@@ -27,6 +27,14 @@ list("./",(o)=>{
   }
     files = filelistresult.sort();  //files 및 filelistresult는 하위 디렉토리를 전부 포함한 pbf파일의 경로 리스트
     fileslength=files.length;
+
+    // console.log(files);
+    filesstring = [];
+    for (b=0; b<fileslength; b++){
+      temp = files[b].replace(/\\/g, '/');
+      filesstring.push(temp);
+    }
+    // console.log(filesstring);
   // console.log(files);
     //각 파일리스트 for문으로 순회하며 콘텐츠 변경한 뒤 regex로 변수 따서 html 만들기
     var template1 = files[0] + '\n\n';
@@ -57,7 +65,8 @@ list("./",(o)=>{
       while((textresult = reg.exec(originaltext)) != null ) {
           textlists.push(textresult[0]); //store the file name into the array files
       };
-      template = '<br>----------------------------------------------<br>' + template + '<a href="file:///' + files[n] + '">' + files[n] + '</a><br><br>';
+
+      template = '<br>----------------------------------------------<br>' + template + '<a href="file:///' + filesstring[n] + '">' + filesstring[n] + '</a><br><br>';
       for (k=0; k<textlists.length; k++) {
         template = template + textlists[k] + '<br>';
       }
